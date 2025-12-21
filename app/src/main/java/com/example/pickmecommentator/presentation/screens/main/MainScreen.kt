@@ -1,5 +1,7 @@
 package com.example.pickmecommentator.presentation.screens.main
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,11 +21,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
+import androidx.compose.ui.draw.scale
 import com.example.pickmecommentator.common.Constants
 import com.example.pickmecommentator.presentation.navigation.bottom.BottomNavRoutes
 import com.example.pickmecommentator.presentation.screens.main.bottomnav.current_session.CurrentSessionScreen
 import com.example.pickmecommentator.presentation.screens.main.bottomnav.list_of_sessions.ListOfSessionsScreen
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -43,8 +46,25 @@ fun MainScreen() {
         bottomBar = {
             NavigationBar(windowInsets = NavigationBarDefaults.windowInsets) {
                 Constants.bottomNavItems.forEachIndexed { index, destination ->
+                    val selected = selectedItemIndex == index
+                    val scale = remember { Animatable(1f) }
+
+                    LaunchedEffect(selected) {
+                        if (selected) {
+                            scale.animateTo(
+                                targetValue = 1.2f,
+                                animationSpec = tween(durationMillis = 100)
+                            )
+                            delay(100)
+                            scale.animateTo(
+                                targetValue = 1f,
+                                animationSpec = tween(durationMillis = 100)
+                            )
+                        }
+                    }
+
                     NavigationBarItem(
-                        selected = selectedItemIndex == index,
+                        selected = selected,
                         onClick = {
                             selectedItemIndex = index
                             coroutineScope.launch {
@@ -53,8 +73,9 @@ fun MainScreen() {
                         },
                         icon = {
                             Icon(
-                                destination.icon,
-                                contentDescription = destination.title
+                                imageVector = destination.icon,
+                                contentDescription = destination.title,
+                                modifier = Modifier.scale(scale.value)
                             )
                         },
                         label = { Text(destination.title) }
@@ -65,7 +86,9 @@ fun MainScreen() {
     ) { innerPadding ->
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxSize().padding(innerPadding),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
             userScrollEnabled = true
         ) { page ->
             when (Constants.bottomNavItems[page].route) {
