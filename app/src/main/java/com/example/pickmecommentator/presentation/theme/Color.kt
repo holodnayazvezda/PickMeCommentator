@@ -1,4 +1,4 @@
-package com.example.pickmecommentator.ui.theme
+package com.example.pickmecommentator.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

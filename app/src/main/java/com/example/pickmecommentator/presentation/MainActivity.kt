@@ -1,4 +1,4 @@
-package com.example.pickmecommentator
+package com.example.pickmecommentator.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,7 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.pickmecommentator.ui.theme.PickMeCommentatorTheme
+import androidx.navigation.compose.rememberNavController
+import com.example.pickmecommentator.presentation.navigation.global.NavigationHost
+import com.example.pickmecommentator.presentation.theme.PickMeCommentatorTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,28 +22,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             PickMeCommentatorTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                    NavigationHost(
+                        navController = rememberNavController(),
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PickMeCommentatorTheme {
-        Greeting("Android")
     }
 }
