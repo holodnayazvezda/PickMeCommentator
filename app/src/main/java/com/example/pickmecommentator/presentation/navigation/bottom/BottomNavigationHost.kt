@@ -16,6 +16,7 @@ fun BottomNavigationHost(
     startDestination: String = BottomNavRoutes.CurrentSessionScreen.route
 ) {
     NavHost(
+        modifier = modifier,
         navController = bottomNavController,
         startDestination = startDestination
     ) {

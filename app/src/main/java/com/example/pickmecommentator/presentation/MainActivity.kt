@@ -21,12 +21,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PickMeCommentatorTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    NavigationHost(
-                        navController = rememberNavController(),
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                NavigationHost(
+                    navController = rememberNavController(),
+                    bottomNavController = rememberNavController()
+                )
             }
         }
     }

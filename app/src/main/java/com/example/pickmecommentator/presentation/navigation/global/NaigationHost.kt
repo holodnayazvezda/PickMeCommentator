@@ -12,8 +12,8 @@ import com.example.pickmecommentator.presentation.screens.main.MainScreen
 fun NavigationHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    startDestination: String = NavRoutes.MainScreen.route,
-    bottomNavController: NavHostController
+    bottomNavController: NavHostController,
+    startDestination: String = NavRoutes.MainScreen.route
 ) {
     NavHost(
         modifier = modifier,
@@ -21,7 +21,7 @@ fun NavigationHost(
         startDestination = startDestination
     ) {
         composable(NavRoutes.MainScreen.route) {
-            MainScreen(bottomNavController)
+            MainScreen()
         }
     }
 }
