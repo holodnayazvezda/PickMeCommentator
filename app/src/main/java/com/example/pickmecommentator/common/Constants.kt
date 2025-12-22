@@ -19,4 +19,6 @@ object Constants {
             title = "Истрия"
         )
     )
+
+    val socketServerUrl = "http://10.82.244.235:1488"
 }
