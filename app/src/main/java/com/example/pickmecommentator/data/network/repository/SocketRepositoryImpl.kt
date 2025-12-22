@@ -8,6 +8,7 @@ import com.example.pickmecommentator.domain.repositories.SocketRepository
 import com.google.gson.Gson
 import io.socket.client.IO
 import io.socket.client.Socket
+import io.socket.engineio.client.EngineIOException
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,13 +47,19 @@ class SocketRepositoryImpl : SocketRepository {
             Log.d("SocketRepo", "Connected")
         }
         socket?.on(Socket.EVENT_DISCONNECT) {
-            _connectionState.update { it.copy(isConnected = false, errorMessage = "") }
+            val error = it.getOrNull(0)
+            val errorMessage = if (error == "ping timeout") {
+                "Ошибка соединения, скорее всего нет интернета, или что-то не так с сервером."
+            } else {
+                ""
+            }
+            _connectionState.update { it.copy(isConnected = false, errorMessage = errorMessage) }
             Log.d("SocketRepo", "Disconnected")
         }
         socket?.on(Socket.EVENT_CONNECT_ERROR) {
             val error = it.getOrNull(0)
-            val errorMessage = if (error is ConnectException) {
-                "Ошибка соединения, скорее всего нет интернета или что-то не так с сервером."
+            val errorMessage = if (error is EngineIOException) {
+                "Ошибка соединения, скорее всего нет интернета, или что-то не так с сервером."
             } else {
                 "Неизвестная ошибка соединения."
             }
