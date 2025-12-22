@@ -6,27 +6,29 @@ import com.example.pickmecommentator.domain.models.Comment
 import com.example.pickmecommentator.domain.models.ConnectionState
 import com.example.pickmecommentator.domain.repositories.SocketRepository
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class CurrentSessionScreenViewModel(
     private val socketRepository: SocketRepository
 ): ViewModel() {
-    val connectionState: StateFlow<ConnectionState> = socketRepository.connectionState
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = ConnectionState()
-        )
+
+    private val _connectionState = MutableStateFlow(ConnectionState())
+    val connectionState: StateFlow<ConnectionState> = _connectionState.asStateFlow()
 
     private val _comments = MutableStateFlow<List<Comment>>(emptyList())
     val comments: StateFlow<List<Comment>> = _comments.asStateFlow()
 
     init {
+        // Observe the repository state and update the ViewModel's state
+        socketRepository.connectionState
+            .onEach { repoState -> _connectionState.value = repoState }
+            .launchIn(viewModelScope)
+
         observeComments()
     }
 
@@ -38,6 +40,11 @@ class CurrentSessionScreenViewModel(
                 socketRepository.disconnect()
             }
         }
+    }
+
+    fun onErrorDialogDismiss() {
+        // Update the ViewModel's state directly, not the repository's
+        _connectionState.update { it.copy(errorMessage = "") }
     }
 
     private fun observeComments () {

@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.update
 import org.json.JSONObject
 import java.net.ConnectException
 import java.net.URISyntaxException
@@ -28,7 +29,7 @@ class SocketRepositoryImpl : SocketRepository {
     init {
         try {
             val options = IO.Options().apply {
-                reconnection = true
+                reconnection = false
                 forceNew = true
             }
 
@@ -41,17 +42,11 @@ class SocketRepositoryImpl : SocketRepository {
 
     private fun setupListeners() {
         socket?.on(Socket.EVENT_CONNECT) {
-            _connectionState.value = _connectionState.value.copy(
-                isConnected = true,
-                errorMessage = ""
-            )
+            _connectionState.update { it.copy(isConnected = true, errorMessage = "") }
             Log.d("SocketRepo", "Connected")
         }
         socket?.on(Socket.EVENT_DISCONNECT) {
-            _connectionState.value = _connectionState.value.copy(
-                isConnected = false,
-                errorMessage = ""
-            )
+            _connectionState.update { it.copy(isConnected = false, errorMessage = "") }
             Log.d("SocketRepo", "Disconnected")
         }
         socket?.on(Socket.EVENT_CONNECT_ERROR) {
@@ -61,10 +56,7 @@ class SocketRepositoryImpl : SocketRepository {
             } else {
                 "Неизвестная ошибка соединения."
             }
-            _connectionState.value = _connectionState.value.copy(
-                isConnected = false,
-                errorMessage = errorMessage
-            )
+            _connectionState.update { it.copy(isConnected = false, errorMessage = errorMessage) }
             Log.e("SocketRepo", "Connection Error")
         }
     }
@@ -92,6 +84,7 @@ class SocketRepositoryImpl : SocketRepository {
 
     override suspend fun connect() {
         if (socket?.connected() == false) {
+            _connectionState.update { it.copy(errorMessage = "") }
             socket?.connect()
         }
     }

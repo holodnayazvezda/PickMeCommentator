@@ -66,4 +66,6 @@ dependencies {
 //  di (koin)
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
+//  network (retrofit)
+    implementation(libs.bundles.retrofit)
 }

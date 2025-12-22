@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.example.pickmecommentator.domain.usecase.FormatTimestampUseCase
 import com.example.pickmecommentator.presentation.components.CommentItem
+import com.example.pickmecommentator.presentation.components.ErrorAlertDialog
 import com.example.pickmecommentator.presentation.components.ServerConnectionElement
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -37,8 +38,19 @@ fun CurrentSessionScreen(
     formatTimestampUseCase: FormatTimestampUseCase = koinInject()
 ) {
     val comments by viewModel.comments.collectAsState()
+    val connectionState by viewModel.connectionState.collectAsState()
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+
+    connectionState.errorMessage?.let {
+        if (it.isNotEmpty()) {
+            ErrorAlertDialog(
+                onDismissRequest = { viewModel.onErrorDialogDismiss() },
+                dialogTitle = "Ошибка соединения",
+                dialogText = connectionState.errorMessage!!
+            )
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -82,12 +94,12 @@ fun CurrentSessionScreen(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(16.dp),
-                containerColor = MaterialTheme.colorScheme.primary // Use primary color
+                containerColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowDownward,
                     contentDescription = "Scroll to bottom",
-                    tint = MaterialTheme.colorScheme.onPrimary // Use onPrimary for icon tint
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }
