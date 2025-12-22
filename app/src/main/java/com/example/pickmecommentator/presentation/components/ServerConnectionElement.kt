@@ -22,12 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.pickmecommentator.presentation.screens.main.bottomnav.current_session.CurrentSessionScreenViewModel
 
 @Composable
@@ -35,13 +33,13 @@ fun ServerConnectionElement(
     viewModel: CurrentSessionScreenViewModel
 ) {
     val connectionState by viewModel.connectionState.collectAsState()
-    
+
     Row(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 20.dp, vertical = 10.dp)
             .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.onPrimary),
+            .background(MaterialTheme.colorScheme.surfaceVariant), // Changed to surfaceVariant for contrast
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -60,25 +58,31 @@ fun ServerConnectionElement(
             }
         }
         Text(
-            modifier = Modifier.padding(start = 5.dp),
+            modifier = Modifier.padding(start = 16.dp),
             text = statusText,
-            style = TextStyle(
-                fontSize = 18.sp
-            )
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Switch(
-            modifier = Modifier.padding(end = 5.dp),
+            modifier = Modifier.padding(end = 16.dp),
             checked = connectionState.isConnected,
             onCheckedChange = {
                 viewModel.onSwitchChanged()
             },
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = MaterialTheme.colorScheme.primary,
+                checkedTrackColor = MaterialTheme.colorScheme.secondary,
+                uncheckedThumbColor = Color.Gray,
+                uncheckedTrackColor = Color.LightGray.copy(alpha = 0.5f)
+            ),
             thumbContent = if (connectionState.isConnected) {
                 {
                     Icon(
                         imageVector = Icons.Filled.Check,
                         contentDescription = null,
                         modifier = Modifier.size(SwitchDefaults.IconSize),
+                        tint = Color.White
                     )
                 }
             } else {
