@@ -5,6 +5,8 @@ import androidx.compose.ui.graphics.Color
 // Custom colors based on the logo
 val RobotBlue = Color(0xFF0080FF)       // A more vibrant and deeper blue
 val LightRobotBlue = Color(0xFF5AD6FF)   // Lighter shade for highlights
+val StatusGreen = Color(0xFF34C759)     // A pleasant green for connection status
+val SwitchBlue = Color(0xFF409cff)     // Custom blue for the switch
 
 // Dark Theme Palette
 val DarkBackground = Color(0xFF0D1117)    // Deep dark blue/black background

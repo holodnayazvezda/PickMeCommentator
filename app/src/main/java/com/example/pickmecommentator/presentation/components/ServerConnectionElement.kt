@@ -20,13 +20,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.example.pickmecommentator.presentation.screens.main.bottomnav.current_session.CurrentSessionScreenViewModel
+import com.example.pickmecommentator.presentation.theme.StatusGreen
+import com.example.pickmecommentator.presentation.theme.SwitchBlue
 
 @Composable
 fun ServerConnectionElement(
@@ -39,29 +40,28 @@ fun ServerConnectionElement(
             .fillMaxSize()
             .padding(horizontal = 20.dp, vertical = 10.dp)
             .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.surfaceVariant), // Changed to surfaceVariant for contrast
+            .background(MaterialTheme.colorScheme.surfaceVariant),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         val statusText = buildAnnotatedString {
-            withStyle(SpanStyle(fontWeight = FontWeight.Normal)) {
+            withStyle(SpanStyle(fontWeight = FontWeight.Normal, color = MaterialTheme.colorScheme.onSurfaceVariant)) {
                 append("Статус: ")
             }
-            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                append(
-                    if (connectionState.isConnected) {
-                        "Подключено"
-                    } else {
-                        "Отключено"
-                    }
-                )
+            if (connectionState.isConnected) {
+                withStyle(SpanStyle(fontWeight = FontWeight.Bold, color = StatusGreen)) {
+                    append("Подключено")
+                }
+            } else {
+                withStyle(SpanStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f))) {
+                    append("Отключено")
+                }
             }
         }
         Text(
             modifier = Modifier.padding(start = 16.dp),
             text = statusText,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            style = MaterialTheme.typography.bodyLarge
         )
 
         Switch(
@@ -71,10 +71,10 @@ fun ServerConnectionElement(
                 viewModel.onSwitchChanged()
             },
             colors = SwitchDefaults.colors(
-                checkedThumbColor = MaterialTheme.colorScheme.primary,
-                checkedTrackColor = MaterialTheme.colorScheme.secondary,
-                uncheckedThumbColor = Color.Gray,
-                uncheckedTrackColor = Color.LightGray.copy(alpha = 0.5f)
+                checkedThumbColor = SwitchBlue,
+                checkedTrackColor = SwitchBlue.copy(alpha = 0.5f),
+                uncheckedThumbColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                uncheckedTrackColor = MaterialTheme.colorScheme.surface
             ),
             thumbContent = if (connectionState.isConnected) {
                 {
@@ -82,7 +82,7 @@ fun ServerConnectionElement(
                         imageVector = Icons.Filled.Check,
                         contentDescription = null,
                         modifier = Modifier.size(SwitchDefaults.IconSize),
-                        tint = Color.White
+                        tint = MaterialTheme.colorScheme.onPrimary // White icon
                     )
                 }
             } else {
