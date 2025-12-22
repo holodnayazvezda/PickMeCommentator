@@ -17,21 +17,30 @@ class CurrentSessionScreenViewModel(
     private val socketRepository: SocketRepository
 ): ViewModel() {
     val connectionState: StateFlow<ConnectionState> = socketRepository.connectionState
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = ConnectionState()
+        )
+
     private val _comments = MutableStateFlow<List<Comment>>(emptyList())
     val comments: StateFlow<List<Comment>> = _comments.asStateFlow()
 
+    init {
+        observeComments()
+    }
+
     fun onSwitchChanged() {
         viewModelScope.launch {
-        if (!connectionState.value.isConnected) {
+            if (!connectionState.value.isConnected) {
                 socketRepository.connect()
-                observeComments()
             } else {
                 socketRepository.disconnect()
             }
         }
     }
 
-    private fun observeComments() {
+    private fun observeComments () {
         viewModelScope.launch {
             socketRepository.incomingComments.collect { newComment ->
                 _comments.update { currentList ->

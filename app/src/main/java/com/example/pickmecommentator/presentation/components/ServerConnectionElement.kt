@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -40,7 +41,7 @@ fun ServerConnectionElement(
             .fillMaxSize()
             .padding(horizontal = 20.dp, vertical = 10.dp)
             .clip(RoundedCornerShape(12.dp))
-            .background(Color(0xFF20264D)),
+            .background(MaterialTheme.colorScheme.onPrimary),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
