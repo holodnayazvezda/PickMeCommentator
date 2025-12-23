@@ -17,8 +17,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.update
 import org.json.JSONObject
-import java.net.ConnectException
-import java.net.URISyntaxException
 
 class SocketRepositoryImpl : SocketRepository {
     private var socket: Socket? = null
@@ -34,7 +32,7 @@ class SocketRepositoryImpl : SocketRepository {
                 forceNew = true
             }
 
-            socket = IO.socket(Constants.socketServerUrl, options)
+            socket = IO.socket(Constants.SOCKET_SERVER_URL, options)
             setupListeners()
         } catch(e: Exception) {
             e.printStackTrace()

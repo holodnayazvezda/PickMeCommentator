@@ -1,16 +1,51 @@
 package com.example.pickmecommentator.common.di
 
+import com.example.pickmecommentator.common.Constants
+import com.example.pickmecommentator.data.network.api.TripsApiService
 import com.example.pickmecommentator.data.network.repository.SocketRepositoryImpl
+import com.example.pickmecommentator.data.network.repository.TripsApiRepositoryImpl
 import com.example.pickmecommentator.domain.repositories.SocketRepository
+import com.example.pickmecommentator.domain.repositories.TripsApiRepository
 import com.example.pickmecommentator.domain.usecase.FormatTimestampUseCase
 import com.example.pickmecommentator.presentation.screens.main.bottomnav.current_session.CurrentSessionScreenViewModel
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 val appModule = module {
+    // Sockets
     single<SocketRepository> { SocketRepositoryImpl() }
 
+    // Network
+    single {
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+        OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .build()
+    }
+
+    single {
+        Retrofit.Builder()
+            .baseUrl(Constants.TRIPS_API_SERVER_URL)
+            .client(get())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    single<TripsApiService> {
+        get<Retrofit>().create(TripsApiService::class.java)
+    }
+
+    single<TripsApiRepository> { TripsApiRepositoryImpl(apiService = get()) }
+
+    // UseCases
     factory { FormatTimestampUseCase() }
 
+    // ViewModels
     viewModel { CurrentSessionScreenViewModel(socketRepository = get()) }
 }

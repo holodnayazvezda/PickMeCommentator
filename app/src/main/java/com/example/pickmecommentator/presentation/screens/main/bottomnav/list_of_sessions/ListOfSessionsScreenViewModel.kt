@@ -3,4 +3,5 @@ package com.example.pickmecommentator.presentation.screens.main.bottomnav.list_o
 import androidx.lifecycle.ViewModel
 
 class ListOfSessionsScreenViewModel : ViewModel() {
+
 }
