@@ -6,7 +6,7 @@ import java.util.Locale
 
 class FormatTimestampUseCase {
     operator fun invoke(timestamp: Long): String {
-        val sdf = SimpleDateFormat("HH:mm:ss dd.MM.yy", Locale.getDefault())
+        val sdf = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
         val date = Date(timestamp * 1000)
         return sdf.format(date)
     }

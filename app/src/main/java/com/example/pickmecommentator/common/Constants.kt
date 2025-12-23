@@ -20,5 +20,5 @@ object Constants {
         )
     )
 
-    val socketServerUrl = "http://10.82.244.235:1488"
+    val socketServerUrl = "http://10.90.96.32:8080"
 }
