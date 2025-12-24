@@ -15,23 +15,23 @@ import androidx.compose.ui.unit.dp
 import com.example.pickmecommentator.domain.models.Comment
 
 @Composable
-fun CommentItem(
-    comment: Comment,
+fun ListItem(
+    title: String,
     formattedTimestamp: String
 ) {
     Card(
         modifier = Modifier
-            .fillMaxWidth(), // Removed horizontal padding to align with list padding
+            .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant // Use surfaceVariant for cards
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = comment.comment,
+                text = title,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

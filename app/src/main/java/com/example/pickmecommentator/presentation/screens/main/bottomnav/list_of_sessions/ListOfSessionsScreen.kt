@@ -1,82 +1,114 @@
 package com.example.pickmecommentator.presentation.screens.main.bottomnav.list_of_sessions
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.example.pickmecommentator.domain.usecase.FormatDateUseCase
+import com.example.pickmecommentator.presentation.components.ListItem
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListOfSessionsScreen(
-    viewModel: ListOfSessionsScreenViewModel = koinViewModel()
+    viewModel: ListOfSessionsScreenViewModel = koinViewModel(),
+    formatDateUseCase: FormatDateUseCase = koinInject()
 ) {
     val state by viewModel.state.collectAsState()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        if (state.trips.isEmpty() && state.isLoading) {
-            // Show a full-screen loading indicator for the initial load
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp)
-            ) {
-                itemsIndexed(state.trips) { index, trip ->
-                    // Simple display of trip info
-                    Column(modifier = Modifier.padding(8.dp)) {
-                        Text(
-                            text = "Trip ID: ${trip.id}",
-                            style = MaterialTheme.typography.bodyLarge,
-                            fontSize = 20.sp
-                        )
-                        Text(
-                            text = "Date: ${trip.date}",
-                            style = MaterialTheme.typography.bodySmall,
-                            fontSize = 13.sp
-                        )
-                    }
+    val cornerRadius = (scrollBehavior.state.collapsedFraction * 12).dp
 
-                    // Check if the user has scrolled to the end of the list
-                    if (index == state.trips.size - 1 && !state.isLoading && state.hasMore) {
-                        LaunchedEffect(Unit) {
-                            viewModel.loadTrips()
+    Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            LargeTopAppBar(
+                title = { Text("Информация о поездках") },
+                scrollBehavior = scrollBehavior,
+                modifier = Modifier.clip(
+                    RoundedCornerShape(
+                        bottomStart = cornerRadius,
+                        bottomEnd = cornerRadius
+                    )
+                ),
+                colors = TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = colorScheme.background,
+                    scrolledContainerColor = colorScheme.background // Changed to match the main background
+                )
+            )
+        }
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            if (state.trips.isEmpty() && state.isLoading) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    itemsIndexed(state.trips) { index, trip ->
+                        ListItem(
+                            title = "Поездка №${trip.id}",
+                            formattedTimestamp = formatDateUseCase(trip.date)
+                        )
+                        if (index == state.trips.size - 1 && !state.isLoading && state.hasMore) {
+                            LaunchedEffect(Unit) {
+                                viewModel.loadTrips()
+                            }
                         }
                     }
-                }
 
-                // Show a loading indicator at the bottom when loading more items
-                if (state.isLoading && state.trips.isNotEmpty()) {
-                    item {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            CircularProgressIndicator()
+                    if (state.isLoading && state.trips.isNotEmpty()) {
+                        item {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                CircularProgressIndicator()
+                            }
                         }
                     }
                 }
             }
-        }
 
-        // Show error message if any
-        state.error?.let {
-            Text(
-                text = it,
-                color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.align(Alignment.Center)
-            )
+            state.error?.let {
+                Text(
+                    text = it,
+                    color = colorScheme.error,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
         }
     }
 }

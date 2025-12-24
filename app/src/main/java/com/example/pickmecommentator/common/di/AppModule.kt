@@ -6,6 +6,7 @@ import com.example.pickmecommentator.data.network.repository.SocketRepositoryImp
 import com.example.pickmecommentator.data.network.repository.TripsApiRepositoryImpl
 import com.example.pickmecommentator.domain.repositories.SocketRepository
 import com.example.pickmecommentator.domain.repositories.TripsApiRepository
+import com.example.pickmecommentator.domain.usecase.FormatDateUseCase
 import com.example.pickmecommentator.domain.usecase.FormatTimestampUseCase
 import com.example.pickmecommentator.domain.usecase.GetTripsUseCase
 import com.example.pickmecommentator.presentation.screens.main.bottomnav.current_session.CurrentSessionScreenViewModel
@@ -47,6 +48,7 @@ val appModule = module {
 
     // UseCases
     factory { FormatTimestampUseCase() }
+    factory { FormatDateUseCase() }
     factory { GetTripsUseCase(tripsRepository = get()) }
 
     // ViewModels

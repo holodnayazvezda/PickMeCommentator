@@ -24,7 +24,6 @@ class CurrentSessionScreenViewModel(
     val comments: StateFlow<List<Comment>> = _comments.asStateFlow()
 
     init {
-        // Observe the repository state and update the ViewModel's state
         socketRepository.connectionState
             .onEach { repoState -> _connectionState.value = repoState }
             .launchIn(viewModelScope)

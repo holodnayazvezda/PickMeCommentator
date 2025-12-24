@@ -28,7 +28,7 @@ class ListOfSessionsScreenViewModel(
         if (_state.value.isLoading || !_state.value.hasMore) return
 
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true, error = null) } // Clear previous error
+            _state.update { it.copy(isLoading = true, error = null) }
 
             try {
                 val response = getTripsUseCase(

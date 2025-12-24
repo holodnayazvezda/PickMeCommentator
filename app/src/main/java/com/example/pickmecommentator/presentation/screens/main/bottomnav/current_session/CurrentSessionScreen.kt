@@ -25,7 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.example.pickmecommentator.domain.usecase.FormatTimestampUseCase
-import com.example.pickmecommentator.presentation.components.CommentItem
+import com.example.pickmecommentator.presentation.components.ListItem
 import com.example.pickmecommentator.presentation.components.ErrorAlertDialog
 import com.example.pickmecommentator.presentation.components.ServerConnectionElement
 import kotlinx.coroutines.launch
@@ -73,8 +73,8 @@ fun CurrentSessionScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(comments) { comment ->
-                        CommentItem(
-                            comment = comment,
+                        ListItem(
+                            title = comment.comment,
                             formattedTimestamp = formatTimestampUseCase(comment.timestamp)
                         )
                     }
