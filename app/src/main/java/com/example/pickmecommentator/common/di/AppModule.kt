@@ -12,7 +12,7 @@ import com.example.pickmecommentator.domain.usecase.GetTripMessagesUseCase
 import com.example.pickmecommentator.domain.usecase.GetTripsUseCase
 import com.example.pickmecommentator.presentation.screens.main.bottomnav.current_trip_messages.CurrentTripMessagesScreenViewModel
 import com.example.pickmecommentator.presentation.screens.main.bottomnav.trips_detalization.list_of_trips.ListOfTripsScreenViewModel
-import com.example.pickmecommentator.presentation.screens.main.bottomnav.trips_detalization.trip_messages.TripMessagesViewModel
+import com.example.pickmecommentator.presentation.screens.main.bottomnav.trips_detalization.trip_messages.TripMessagesScreenViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -57,5 +57,5 @@ val appModule = module {
     // ViewModels
     viewModel { CurrentTripMessagesScreenViewModel(socketRepository = get()) }
     viewModel { ListOfTripsScreenViewModel(getTripsUseCase = get()) }
-    viewModel { TripMessagesViewModel(savedStateHandle = get(), getTripMessagesUseCase = get()) }
+    viewModel { TripMessagesScreenViewModel(savedStateHandle = get(), getTripMessagesUseCase = get()) }
 }

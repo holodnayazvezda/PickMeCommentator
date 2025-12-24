@@ -10,8 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,20 +29,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import com.example.pickmecommentator.domain.usecase.FormatTimestampUseCase
+import androidx.navigation.NavHostController
+import com.example.pickmecommentator.presentation.components.ErrorAlertDialog
 import com.example.pickmecommentator.presentation.components.ListItem
 import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TripMessagesScreen(
+    navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: TripMessagesViewModel = koinViewModel(),
-    formatTimestampUseCase: FormatTimestampUseCase = koinInject()
+    viewModel: TripMessagesScreenViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+
+    state.error?.let {
+        ErrorAlertDialog(
+            onDismissRequest = { viewModel.onErrorDialogDismiss() },
+            dialogTitle = "Ошибка",
+            dialogText = it
+        )
+    }
 
     Column(
         modifier = modifier
@@ -47,6 +59,14 @@ fun TripMessagesScreen(
     ) {
         LargeTopAppBar(
             title = { Text("Комментарии к поездке: ${state.tripId}") },
+            navigationIcon = {
+                IconButton(onClick = { navController.navigateUp() }) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Назад"
+                    )
+                }
+            },
             scrollBehavior = scrollBehavior,
             colors = TopAppBarDefaults.largeTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.background,
@@ -62,11 +82,13 @@ fun TripMessagesScreen(
             } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     itemsIndexed(state.messages) { index, message ->
-                        ListItem(title = message.data.joke)
+                        ListItem(
+                            title = message.data.joke
+                        )
                         if (index == state.messages.size - 1 && !state.isLoading && state.hasMore) {
                             LaunchedEffect(Unit) {
                                 viewModel.loadMessages()
@@ -87,14 +109,6 @@ fun TripMessagesScreen(
                         }
                     }
                 }
-            }
-
-            state.error?.let {
-                Text(
-                    text = it,
-                    color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.align(Alignment.Center)
-                )
             }
         }
     }

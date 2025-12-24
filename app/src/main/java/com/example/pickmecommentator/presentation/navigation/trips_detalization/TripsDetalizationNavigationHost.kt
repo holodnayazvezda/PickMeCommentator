@@ -29,7 +29,7 @@ fun TripsDetalizationNavigationHost(
             arguments = listOf(navArgument("tripId") { type = NavType.StringType })
         ) { backStackEntry ->
             val tripId = backStackEntry.arguments?.getString("tripId") ?: ""
-            TripMessagesScreen()
+            TripMessagesScreen(navController)
         }
     }
 }

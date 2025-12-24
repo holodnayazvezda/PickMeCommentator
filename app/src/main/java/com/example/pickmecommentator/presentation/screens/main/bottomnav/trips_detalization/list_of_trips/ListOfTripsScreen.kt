@@ -27,6 +27,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.pickmecommentator.domain.usecase.FormatDateUseCase
+import com.example.pickmecommentator.presentation.components.ErrorAlertDialog
 import com.example.pickmecommentator.presentation.components.ListItem
 import com.example.pickmecommentator.presentation.navigation.trips_detalization.TripsDetalizationNavRoutes
 import org.koin.androidx.compose.koinViewModel
@@ -42,6 +43,13 @@ fun ListOfTripsScreen(
     val state by viewModel.state.collectAsState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
+    state.error?.let {
+        ErrorAlertDialog(
+            onDismissRequest = { viewModel.onErrorDialogDismiss() },
+            dialogTitle = "Ошибка",
+            dialogText = it
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -72,11 +80,7 @@ fun ListOfTripsScreen(
                         ListItem(
                             title = "Поездка №${trip.id}",
                             comment = formatDateUseCase(trip.date),
-                            onClick = {
-                                navController.navigate(
-                                    TripsDetalizationNavRoutes.TripMessagesScreen.withArgs(trip.id)
-                                )
-                            }
+                            onClick = { navController.navigate(TripsDetalizationNavRoutes.TripMessagesScreen.withArgs(trip.id))}
                         )
                         if (index == state.trips.size - 1 && !state.isLoading && state.hasMore) {
                             LaunchedEffect(Unit) {
@@ -98,14 +102,6 @@ fun ListOfTripsScreen(
                         }
                     }
                 }
-            }
-
-            state.error?.let {
-                Text(
-                    text = it,
-                    color = colorScheme.error,
-                    modifier = Modifier.align(Alignment.Center)
-                )
             }
         }
     }

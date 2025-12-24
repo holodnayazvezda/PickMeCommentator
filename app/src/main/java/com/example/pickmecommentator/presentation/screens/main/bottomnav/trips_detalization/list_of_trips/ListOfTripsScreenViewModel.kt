@@ -52,4 +52,8 @@ class ListOfTripsScreenViewModel(
             }
         }
     }
+
+    fun onErrorDialogDismiss() {
+        _state.update { it.copy(error = null) }
+    }
 }

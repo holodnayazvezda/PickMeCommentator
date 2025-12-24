@@ -21,6 +21,6 @@ object Constants {
         )
     )
 
-    const val SOCKET_SERVER_URL = "http://10.90.96.32:8080/"
-    const val TRIPS_API_SERVER_URL = "http://10.90.96.32:8001/"
+    const val SOCKET_SERVER_URL = "http://10.82.244.235:8080/"
+    const val TRIPS_API_SERVER_URL = "http://10.82.244.235:8001/"
 }
