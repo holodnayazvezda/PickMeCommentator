@@ -16,6 +16,7 @@ import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,53 +52,58 @@ fun ListOfTripsScreen(
         )
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
+    PullToRefreshBox(
+        isRefreshing = state.isLoading,
+        onRefresh = { viewModel.refresh() }
     ) {
-        LargeTopAppBar(
-            title = { Text("Информация о поездках") },
-            scrollBehavior = scrollBehavior,
-            colors = TopAppBarDefaults.largeTopAppBarColors(
-                containerColor = colorScheme.background,
-                scrolledContainerColor = colorScheme.background
-            )
-        )
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
         ) {
-            if (state.trips.isEmpty() && state.isLoading) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-            } else {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    itemsIndexed(state.trips) { index, trip ->
-                        ListItem(
-                            title = "Поездка №${trip.id}",
-                            comment = formatDateUseCase(trip.date),
-                            onClick = { navController.navigate(TripsDetalizationNavRoutes.TripMessagesScreen.withArgs(trip.id))}
-                        )
-                        if (index == state.trips.size - 1 && !state.isLoading && state.hasMore) {
-                            LaunchedEffect(Unit) {
-                                viewModel.loadTrips()
+            LargeTopAppBar(
+                title = { Text("Информация о поездках") },
+                scrollBehavior = scrollBehavior,
+                colors = TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = colorScheme.background,
+                    scrolledContainerColor = colorScheme.background
+                )
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                if (state.trips.isEmpty() && state.isLoading) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        itemsIndexed(state.trips) { index, trip ->
+                            ListItem(
+                                title = "Поездка №${trip.id}",
+                                comment = formatDateUseCase(trip.date),
+                                onClick = { navController.navigate(TripsDetalizationNavRoutes.TripMessagesScreen.withArgs(trip.id))}
+                            )
+                            if (index == state.trips.size - 1 && !state.isLoading && state.hasMore) {
+                                LaunchedEffect(Unit) {
+                                    viewModel.loadTrips()
+                                }
                             }
                         }
-                    }
 
-                    if (state.isLoading && state.trips.isNotEmpty()) {
-                        item {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(8.dp),
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                CircularProgressIndicator()
+                        if (state.isLoading && state.trips.isNotEmpty()) {
+                            item {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp),
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    CircularProgressIndicator()
+                                }
                             }
                         }
                     }

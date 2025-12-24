@@ -17,9 +17,6 @@ class ListOfTripsScreenViewModel(
     private val _state = MutableStateFlow(TripsScreenState())
     val state = _state.asStateFlow()
 
-    private var currentPage = 0
-    private val pageSize = 10
-
     init {
         loadTrips()
     }
@@ -32,8 +29,8 @@ class ListOfTripsScreenViewModel(
 
             try {
                 val response = getTripsUseCase(
-                    offset = currentPage * pageSize,
-                    limit = pageSize
+                    offset = _state.value.trips.size,
+                    limit = 10
                 )
                 _state.update { currentState ->
                     currentState.copy(
@@ -42,7 +39,6 @@ class ListOfTripsScreenViewModel(
                         hasMore = response.hasMore
                     )
                 }
-                currentPage++
             } catch (e: Exception) {
                 val errorMessage = when (e) {
                     is IOException -> "Ошибка сети. Проверьте подключение к интернету."
@@ -50,6 +46,13 @@ class ListOfTripsScreenViewModel(
                 }
                 _state.update { it.copy(isLoading = false, error = errorMessage) }
             }
+        }
+    }
+
+    fun refresh() {
+        viewModelScope.launch {
+            _state.update { it.copy(trips = emptyList(), hasMore = true) }
+            loadTrips()
         }
     }
 
