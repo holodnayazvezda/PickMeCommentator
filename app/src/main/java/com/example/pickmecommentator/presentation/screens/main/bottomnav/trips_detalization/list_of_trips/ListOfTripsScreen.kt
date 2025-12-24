@@ -72,7 +72,11 @@ fun ListOfTripsScreen(
                         ListItem(
                             title = "Поездка №${trip.id}",
                             formattedTimestamp = formatDateUseCase(trip.date),
-                            onClick = {navController.navigate(TripsDetalizationNavRoutes.TripMessagesScreen.route)}
+                            onClick = {
+                                navController.navigate(
+                                    TripsDetalizationNavRoutes.TripMessagesScreen.withArgs(trip.id)
+                                )
+                            }
                         )
                         if (index == state.trips.size - 1 && !state.isLoading && state.hasMore) {
                             LaunchedEffect(Unit) {

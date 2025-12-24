@@ -21,10 +21,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PickMeCommentatorTheme {
-                NavigationHost(
-                    navController = rememberNavController(),
-                    bottomNavController = rememberNavController()
-                )
+                NavigationHost(navController = rememberNavController())
             }
         }
     }
