@@ -1,4 +1,4 @@
-package com.example.pickmecommentator.presentation.screens.main.bottomnav.current_session
+package com.example.pickmecommentator.presentation.screens.main.bottomnav.current_trip_messages
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

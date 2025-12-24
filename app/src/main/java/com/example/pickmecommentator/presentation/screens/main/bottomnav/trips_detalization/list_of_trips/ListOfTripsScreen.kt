@@ -1,4 +1,4 @@
-package com.example.pickmecommentator.presentation.screens.main.bottomnav.list_of_sessions
+package com.example.pickmecommentator.presentation.screens.main.bottomnav.trips_detalization.list_of_trips
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,14 +25,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.pickmecommentator.domain.usecase.FormatDateUseCase
 import com.example.pickmecommentator.presentation.components.ListItem
+import com.example.pickmecommentator.presentation.navigation.trips_detalization.TripsDetalizationNavRoutes
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListOfSessionsScreen(
+fun ListOfTripsScreen(
+    navController: NavHostController,
     viewModel: ListOfTripsScreenViewModel = koinViewModel(),
     formatDateUseCase: FormatDateUseCase = koinInject()
 ) {
@@ -68,7 +71,8 @@ fun ListOfSessionsScreen(
                     itemsIndexed(state.trips) { index, trip ->
                         ListItem(
                             title = "Поездка №${trip.id}",
-                            formattedTimestamp = formatDateUseCase(trip.date)
+                            formattedTimestamp = formatDateUseCase(trip.date),
+                            onClick = {navController.navigate(TripsDetalizationNavRoutes.TripMessagesScreen.route)}
                         )
                         if (index == state.trips.size - 1 && !state.isLoading && state.hasMore) {
                             LaunchedEffect(Unit) {

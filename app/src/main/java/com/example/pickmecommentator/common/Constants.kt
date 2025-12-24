@@ -5,6 +5,7 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.rounded.Menu
 import com.example.pickmecommentator.domain.models.BottomNavItemModel
 import com.example.pickmecommentator.presentation.navigation.bottom.BottomNavRoutes
+import com.example.pickmecommentator.presentation.navigation.trips_detalization.TripsDetalizationNavRoutes
 
 object Constants {
     val bottomNavItems = listOf(
@@ -14,9 +15,9 @@ object Constants {
             title = "Трансляция"
         ),
         BottomNavItemModel(
-            route = BottomNavRoutes.ListOfSessionsScreen.route,
+            route = BottomNavRoutes.TripsDetalization.route,
             icon = Icons.Rounded.Menu,
-            title = "Истрия"
+            title = "История"
         )
     )
 

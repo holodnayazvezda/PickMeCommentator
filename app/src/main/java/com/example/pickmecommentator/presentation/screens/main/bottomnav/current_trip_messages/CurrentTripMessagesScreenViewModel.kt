@@ -1,4 +1,4 @@
-package com.example.pickmecommentator.presentation.screens.main.bottomnav.current_session
+package com.example.pickmecommentator.presentation.screens.main.bottomnav.current_trip_messages
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

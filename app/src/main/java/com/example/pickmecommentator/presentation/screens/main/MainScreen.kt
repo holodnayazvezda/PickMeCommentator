@@ -26,8 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import com.example.pickmecommentator.common.Constants
 import com.example.pickmecommentator.presentation.navigation.bottom.BottomNavRoutes
-import com.example.pickmecommentator.presentation.screens.main.bottomnav.current_session.CurrentTripMessagesScreen
-import com.example.pickmecommentator.presentation.screens.main.bottomnav.list_of_sessions.ListOfSessionsScreen
+import com.example.pickmecommentator.presentation.screens.main.bottomnav.current_trip_messages.CurrentTripMessagesScreen
+import com.example.pickmecommentator.presentation.screens.main.bottomnav.trips_detalization.TripsDetalizationScreen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -105,7 +105,7 @@ fun MainScreen() {
         ) { page ->
             when (Constants.bottomNavItems[page].route) {
                 BottomNavRoutes.CurrentSessionScreen.route -> CurrentTripMessagesScreen()
-                BottomNavRoutes.ListOfSessionsScreen.route -> ListOfSessionsScreen()
+                BottomNavRoutes.TripsDetalization.route -> TripsDetalizationScreen()
             }
         }
     }

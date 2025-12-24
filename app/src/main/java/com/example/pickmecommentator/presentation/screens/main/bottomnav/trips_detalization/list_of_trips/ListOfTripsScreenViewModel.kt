@@ -1,4 +1,4 @@
-package com.example.pickmecommentator.presentation.screens.main.bottomnav.list_of_sessions
+package com.example.pickmecommentator.presentation.screens.main.bottomnav.trips_detalization.list_of_trips
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
