@@ -6,5 +6,6 @@ data class TripsScreenState(
     val trips: List<Trip> = emptyList(),
     val isLoading: Boolean = false,
     val error: String? = null,
+    val showError: Boolean = false,
     val hasMore: Boolean = true
 )

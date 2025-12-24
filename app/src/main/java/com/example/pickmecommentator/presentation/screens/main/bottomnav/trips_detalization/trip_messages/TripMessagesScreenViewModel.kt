@@ -38,7 +38,6 @@ class TripMessagesScreenViewModel(
         if (state.value.isLoading || !state.value.hasMore) return
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
-            delay(2000)
             try {
                 val response = getTripMessagesUseCase(
                     tripId = state.value.tripId,

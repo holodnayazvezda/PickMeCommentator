@@ -36,6 +36,7 @@ class ListOfTripsScreenViewModel(
                     currentState.copy(
                         trips = currentState.trips + response.trips,
                         isLoading = false,
+                        error = null,
                         hasMore = response.hasMore
                     )
                 }
@@ -44,7 +45,13 @@ class ListOfTripsScreenViewModel(
                     is IOException -> "Ошибка сети. Проверьте подключение к интернету."
                     else -> "Произошла неизвестная ошибка."
                 }
-                _state.update { it.copy(isLoading = false, error = errorMessage) }
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = errorMessage,
+                        showError = true
+                    )
+                }
             }
         }
     }
@@ -57,6 +64,6 @@ class ListOfTripsScreenViewModel(
     }
 
     fun onErrorDialogDismiss() {
-        _state.update { it.copy(error = null) }
+        _state.update { it.copy(showError = false) }
     }
 }

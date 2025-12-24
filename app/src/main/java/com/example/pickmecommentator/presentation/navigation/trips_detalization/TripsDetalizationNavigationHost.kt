@@ -27,8 +27,7 @@ fun TripsDetalizationNavigationHost(
         composable(
             route = TripsDetalizationNavRoutes.TripMessagesScreen.route,
             arguments = listOf(navArgument("tripId") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val tripId = backStackEntry.arguments?.getString("tripId") ?: ""
+        ) {
             TripMessagesScreen(navController)
         }
     }

@@ -44,11 +44,11 @@ fun ListOfTripsScreen(
     val state by viewModel.state.collectAsState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
-    state.error?.let {
+    if (state.showError) {
         ErrorAlertDialog(
             onDismissRequest = { viewModel.onErrorDialogDismiss() },
             dialogTitle = "Ошибка",
-            dialogText = it
+            dialogText = state.error ?: ""
         )
     }
 
@@ -84,7 +84,7 @@ fun ListOfTripsScreen(
                             comment = formatDateUseCase(trip.date),
                             onClick = { navController.navigate(TripsDetalizationNavRoutes.TripMessagesScreen.withArgs(trip.id))}
                         )
-                        if (index == state.trips.size - 1 && !state.isLoading && state.hasMore) {
+                        if (index == state.trips.size - 1 && !state.isLoading && state.hasMore && state.error == null) {
                             LaunchedEffect(Unit) {
                                 viewModel.loadTrips()
                             }
