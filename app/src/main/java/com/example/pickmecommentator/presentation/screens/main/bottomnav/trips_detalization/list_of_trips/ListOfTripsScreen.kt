@@ -73,37 +73,20 @@ fun ListOfTripsScreen(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                if (state.trips.isEmpty() && state.isLoading) {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                } else {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        itemsIndexed(state.trips) { index, trip ->
-                            ListItem(
-                                title = "Поездка №${trip.id}",
-                                comment = formatDateUseCase(trip.date),
-                                onClick = { navController.navigate(TripsDetalizationNavRoutes.TripMessagesScreen.withArgs(trip.id))}
-                            )
-                            if (index == state.trips.size - 1 && !state.isLoading && state.hasMore) {
-                                LaunchedEffect(Unit) {
-                                    viewModel.loadTrips()
-                                }
-                            }
-                        }
-
-                        if (state.isLoading && state.trips.isNotEmpty()) {
-                            item {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(8.dp),
-                                    horizontalArrangement = Arrangement.Center
-                                ) {
-                                    CircularProgressIndicator()
-                                }
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    itemsIndexed(state.trips) { index, trip ->
+                        ListItem(
+                            title = "Поездка №${trip.id}",
+                            comment = formatDateUseCase(trip.date),
+                            onClick = { navController.navigate(TripsDetalizationNavRoutes.TripMessagesScreen.withArgs(trip.id))}
+                        )
+                        if (index == state.trips.size - 1 && !state.isLoading && state.hasMore) {
+                            LaunchedEffect(Unit) {
+                                viewModel.loadTrips()
                             }
                         }
                     }

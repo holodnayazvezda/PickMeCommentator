@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pickmecommentator.data.network.models.Message
 import com.example.pickmecommentator.domain.usecase.GetTripMessagesUseCase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -37,6 +38,7 @@ class TripMessagesScreenViewModel(
         if (state.value.isLoading || !state.value.hasMore) return
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
+            delay(2000)
             try {
                 val response = getTripMessagesUseCase(
                     tripId = state.value.tripId,

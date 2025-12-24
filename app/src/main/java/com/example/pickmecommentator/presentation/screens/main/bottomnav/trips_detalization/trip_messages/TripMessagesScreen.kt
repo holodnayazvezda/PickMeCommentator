@@ -82,35 +82,18 @@ fun TripMessagesScreen(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                if (state.messages.isEmpty() && state.isLoading) {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                } else {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        itemsIndexed(state.messages) { index, message ->
-                            ListItem(
-                                title = message.data.joke
-                            )
-                            if (index == state.messages.size - 1 && !state.isLoading && state.hasMore) {
-                                LaunchedEffect(Unit) {
-                                    viewModel.loadMessages()
-                                }
-                            }
-                        }
-
-                        if (state.isLoading && state.messages.isNotEmpty()) {
-                            item {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(8.dp),
-                                    horizontalArrangement = Arrangement.Center
-                                ) {
-                                    CircularProgressIndicator()
-                                }
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    itemsIndexed(state.messages) { index, message ->
+                        ListItem(
+                            title = message.data.joke
+                        )
+                        if (index == state.messages.size - 1 && !state.isLoading && state.hasMore) {
+                            LaunchedEffect(Unit) {
+                                viewModel.loadMessages()
                             }
                         }
                     }
