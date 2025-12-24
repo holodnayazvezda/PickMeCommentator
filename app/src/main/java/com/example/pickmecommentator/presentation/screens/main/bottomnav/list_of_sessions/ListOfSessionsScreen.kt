@@ -2,6 +2,7 @@ package com.example.pickmecommentator.presentation.screens.main.bottomnav.list_o
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +15,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme.colorScheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -43,29 +43,28 @@ fun ListOfSessionsScreen(
 
     val cornerRadius = (scrollBehavior.state.collapsedFraction * 12).dp
 
-    Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            LargeTopAppBar(
-                title = { Text("Информация о поездках") },
-                scrollBehavior = scrollBehavior,
-                modifier = Modifier.clip(
-                    RoundedCornerShape(
-                        bottomStart = cornerRadius,
-                        bottomEnd = cornerRadius
-                    )
-                ),
-                colors = TopAppBarDefaults.largeTopAppBarColors(
-                    containerColor = colorScheme.background,
-                    scrolledContainerColor = colorScheme.background // Changed to match the main background
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+    ) {
+        LargeTopAppBar(
+            title = { Text("Информация о поездках") },
+            scrollBehavior = scrollBehavior,
+            modifier = Modifier.clip(
+                RoundedCornerShape(
+                    bottomStart = cornerRadius,
+                    bottomEnd = cornerRadius
                 )
+            ),
+            colors = TopAppBarDefaults.largeTopAppBarColors(
+                containerColor = colorScheme.background,
+                scrolledContainerColor = colorScheme.background // Changed to match the main background
             )
-        }
-    ) { innerPadding ->
+        )
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
         ) {
             if (state.trips.isEmpty() && state.isLoading) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
