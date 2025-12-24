@@ -75,7 +75,7 @@ fun CurrentTripMessagesScreen(
                     items(comments) { comment ->
                         ListItem(
                             title = comment.comment,
-                            formattedTimestamp = formatTimestampUseCase(comment.timestamp)
+                            comment = formatTimestampUseCase(comment.timestamp)
                         )
                     }
                 }

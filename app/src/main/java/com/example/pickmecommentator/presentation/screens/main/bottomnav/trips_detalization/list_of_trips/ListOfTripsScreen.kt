@@ -71,7 +71,7 @@ fun ListOfTripsScreen(
                     itemsIndexed(state.trips) { index, trip ->
                         ListItem(
                             title = "Поездка №${trip.id}",
-                            formattedTimestamp = formatDateUseCase(trip.date),
+                            comment = formatDateUseCase(trip.date),
                             onClick = {
                                 navController.navigate(
                                     TripsDetalizationNavRoutes.TripMessagesScreen.withArgs(trip.id)

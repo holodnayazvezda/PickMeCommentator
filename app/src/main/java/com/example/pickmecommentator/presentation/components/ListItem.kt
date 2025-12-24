@@ -13,12 +13,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.pickmecommentator.domain.models.Comment
 
 @Composable
 fun ListItem(
     title: String,
-    formattedTimestamp: String,
+    comment: String = "",
     onClick: () -> Unit = {}
 ) {
     Card(
@@ -35,16 +34,18 @@ fun ListItem(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = title,
+                text = title.trim(),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = formattedTimestamp,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-            )
+            if (comment.isNotBlank()) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = comment,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                )
+            }
         }
     }
 }

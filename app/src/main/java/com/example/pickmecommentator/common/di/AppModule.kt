@@ -8,6 +8,7 @@ import com.example.pickmecommentator.domain.repositories.SocketRepository
 import com.example.pickmecommentator.domain.repositories.TripsApiRepository
 import com.example.pickmecommentator.domain.usecase.FormatDateUseCase
 import com.example.pickmecommentator.domain.usecase.FormatTimestampUseCase
+import com.example.pickmecommentator.domain.usecase.GetTripMessagesUseCase
 import com.example.pickmecommentator.domain.usecase.GetTripsUseCase
 import com.example.pickmecommentator.presentation.screens.main.bottomnav.current_trip_messages.CurrentTripMessagesScreenViewModel
 import com.example.pickmecommentator.presentation.screens.main.bottomnav.trips_detalization.list_of_trips.ListOfTripsScreenViewModel
@@ -51,9 +52,10 @@ val appModule = module {
     factory { FormatTimestampUseCase() }
     factory { FormatDateUseCase() }
     factory { GetTripsUseCase(tripsRepository = get()) }
+    factory { GetTripMessagesUseCase(tripsRepository = get()) }
 
     // ViewModels
     viewModel { CurrentTripMessagesScreenViewModel(socketRepository = get()) }
     viewModel { ListOfTripsScreenViewModel(getTripsUseCase = get()) }
-    viewModel { TripMessagesViewModel(savedStateHandle = get()) }
+    viewModel { TripMessagesViewModel(savedStateHandle = get(), getTripMessagesUseCase = get()) }
 }
