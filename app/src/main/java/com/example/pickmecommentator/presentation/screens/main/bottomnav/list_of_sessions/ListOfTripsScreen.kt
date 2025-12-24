@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LargeTopAppBar
@@ -24,7 +23,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.example.pickmecommentator.domain.usecase.FormatDateUseCase
@@ -35,13 +33,12 @@ import org.koin.compose.koinInject
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListOfSessionsScreen(
-    viewModel: ListOfSessionsScreenViewModel = koinViewModel(),
+    viewModel: ListOfTripsScreenViewModel = koinViewModel(),
     formatDateUseCase: FormatDateUseCase = koinInject()
 ) {
     val state by viewModel.state.collectAsState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
-    val cornerRadius = (scrollBehavior.state.collapsedFraction * 12).dp
 
     Column(
         modifier = Modifier
@@ -51,15 +48,9 @@ fun ListOfSessionsScreen(
         LargeTopAppBar(
             title = { Text("Информация о поездках") },
             scrollBehavior = scrollBehavior,
-            modifier = Modifier.clip(
-                RoundedCornerShape(
-                    bottomStart = cornerRadius,
-                    bottomEnd = cornerRadius
-                )
-            ),
             colors = TopAppBarDefaults.largeTopAppBarColors(
                 containerColor = colorScheme.background,
-                scrolledContainerColor = colorScheme.background // Changed to match the main background
+                scrolledContainerColor = colorScheme.background
             )
         )
         Box(

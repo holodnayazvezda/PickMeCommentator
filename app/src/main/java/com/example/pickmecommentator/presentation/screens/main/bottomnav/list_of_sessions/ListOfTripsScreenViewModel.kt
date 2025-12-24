@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-class ListOfSessionsScreenViewModel(
+class ListOfTripsScreenViewModel(
     private val getTripsUseCase: GetTripsUseCase
 ) : ViewModel() {
 

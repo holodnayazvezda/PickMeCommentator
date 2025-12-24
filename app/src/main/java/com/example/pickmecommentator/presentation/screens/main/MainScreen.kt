@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import com.example.pickmecommentator.common.Constants
 import com.example.pickmecommentator.presentation.navigation.bottom.BottomNavRoutes
-import com.example.pickmecommentator.presentation.screens.main.bottomnav.current_session.CurrentSessionScreen
+import com.example.pickmecommentator.presentation.screens.main.bottomnav.current_session.CurrentTripMessagesScreen
 import com.example.pickmecommentator.presentation.screens.main.bottomnav.list_of_sessions.ListOfSessionsScreen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -104,7 +104,7 @@ fun MainScreen() {
             userScrollEnabled = true
         ) { page ->
             when (Constants.bottomNavItems[page].route) {
-                BottomNavRoutes.CurrentSessionScreen.route -> CurrentSessionScreen()
+                BottomNavRoutes.CurrentSessionScreen.route -> CurrentTripMessagesScreen()
                 BottomNavRoutes.ListOfSessionsScreen.route -> ListOfSessionsScreen()
             }
         }

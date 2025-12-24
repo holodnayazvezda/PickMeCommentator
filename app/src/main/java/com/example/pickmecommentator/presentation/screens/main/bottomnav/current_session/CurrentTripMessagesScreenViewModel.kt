@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class CurrentSessionScreenViewModel(
+class CurrentTripMessagesScreenViewModel(
     private val socketRepository: SocketRepository
 ): ViewModel() {
 

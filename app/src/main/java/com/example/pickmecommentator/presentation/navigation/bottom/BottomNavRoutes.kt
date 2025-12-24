@@ -4,5 +4,6 @@ enum class BottomNavRoutes(
     val route: String
 ) {
     CurrentSessionScreen("current_session"),
-    ListOfSessionsScreen("list_of_sessions")
+    ListOfSessionsScreen("list_of_sessions"),
+    TripMessagesScreen("trip_messages")
 }

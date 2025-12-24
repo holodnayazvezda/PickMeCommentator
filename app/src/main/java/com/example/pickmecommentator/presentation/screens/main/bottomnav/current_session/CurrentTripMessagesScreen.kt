@@ -33,8 +33,8 @@ import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
 @Composable
-fun CurrentSessionScreen(
-    viewModel: CurrentSessionScreenViewModel = koinViewModel(),
+fun CurrentTripMessagesScreen(
+    viewModel: CurrentTripMessagesScreenViewModel = koinViewModel(),
     formatTimestampUseCase: FormatTimestampUseCase = koinInject()
 ) {
     val comments by viewModel.comments.collectAsState()

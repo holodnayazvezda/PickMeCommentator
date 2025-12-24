@@ -1,5 +1,6 @@
 package com.example.pickmecommentator.presentation.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,11 +18,14 @@ import com.example.pickmecommentator.domain.models.Comment
 @Composable
 fun ListItem(
     title: String,
-    formattedTimestamp: String
+    formattedTimestamp: String,
+    onClick: () -> Unit = {}
 ) {
     Card(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth().clickable {
+                onClick()
+            },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant

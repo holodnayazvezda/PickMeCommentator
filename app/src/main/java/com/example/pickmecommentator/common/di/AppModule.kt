@@ -9,8 +9,8 @@ import com.example.pickmecommentator.domain.repositories.TripsApiRepository
 import com.example.pickmecommentator.domain.usecase.FormatDateUseCase
 import com.example.pickmecommentator.domain.usecase.FormatTimestampUseCase
 import com.example.pickmecommentator.domain.usecase.GetTripsUseCase
-import com.example.pickmecommentator.presentation.screens.main.bottomnav.current_session.CurrentSessionScreenViewModel
-import com.example.pickmecommentator.presentation.screens.main.bottomnav.list_of_sessions.ListOfSessionsScreenViewModel
+import com.example.pickmecommentator.presentation.screens.main.bottomnav.current_session.CurrentTripMessagesScreenViewModel
+import com.example.pickmecommentator.presentation.screens.main.bottomnav.list_of_sessions.ListOfTripsScreenViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -52,6 +52,6 @@ val appModule = module {
     factory { GetTripsUseCase(tripsRepository = get()) }
 
     // ViewModels
-    viewModel { CurrentSessionScreenViewModel(socketRepository = get()) }
-    viewModel { ListOfSessionsScreenViewModel(getTripsUseCase = get()) }
+    viewModel { CurrentTripMessagesScreenViewModel(socketRepository = get()) }
+    viewModel { ListOfTripsScreenViewModel(getTripsUseCase = get()) }
 }
