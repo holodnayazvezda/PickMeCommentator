@@ -7,5 +7,6 @@ data class TripMessagesScreenState(
     val messages: List<Message> = emptyList(),
     val isLoading: Boolean = false,
     val error: String? = null,
+    val showError: Boolean = false,
     val hasMore: Boolean = true
 )

@@ -2,7 +2,7 @@ package com.example.pickmecommentator.presentation.screens.main.bottomnav.curren
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pickmecommentator.domain.models.Comment
+import com.example.pickmecommentator.domain.models.CommentModel
 import com.example.pickmecommentator.domain.models.ConnectionState
 import com.example.pickmecommentator.domain.repositories.SocketRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,8 +20,8 @@ class CurrentTripMessagesScreenViewModel(
     private val _connectionState = MutableStateFlow(ConnectionState())
     val connectionState: StateFlow<ConnectionState> = _connectionState.asStateFlow()
 
-    private val _comments = MutableStateFlow<List<Comment>>(emptyList())
-    val comments: StateFlow<List<Comment>> = _comments.asStateFlow()
+    private val _comments = MutableStateFlow<List<CommentModel>>(emptyList())
+    val comments: StateFlow<List<CommentModel>> = _comments.asStateFlow()
 
     init {
         socketRepository.connectionState

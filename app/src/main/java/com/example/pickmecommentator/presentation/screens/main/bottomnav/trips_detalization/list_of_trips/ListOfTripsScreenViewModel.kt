@@ -42,7 +42,7 @@ class ListOfTripsScreenViewModel(
                 }
             } catch (e: Exception) {
                 val errorMessage = when (e) {
-                    is IOException -> "Ошибка сети. Проверьте подключение к интернету."
+                    is IOException -> "Проверьте подключение к интернету и состояние сервера."
                     else -> "Произошла неизвестная ошибка."
                 }
                 _state.update {

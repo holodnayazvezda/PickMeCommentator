@@ -2,7 +2,7 @@ package com.example.pickmecommentator.data.network.repository
 
 import android.util.Log
 import com.example.pickmecommentator.common.Constants
-import com.example.pickmecommentator.domain.models.Comment
+import com.example.pickmecommentator.domain.models.CommentModel
 import com.example.pickmecommentator.domain.models.ConnectionState
 import com.example.pickmecommentator.domain.repositories.SocketRepository
 import com.google.gson.Gson
@@ -66,13 +66,13 @@ class SocketRepositoryImpl : SocketRepository {
         }
     }
 
-    override val incomingComments: Flow<Comment> = callbackFlow {
+    override val incomingComments: Flow<CommentModel> = callbackFlow {
         val listener = io.socket.emitter.Emitter.Listener { args ->
             if (args.isNotEmpty()) {
                 val data = args[0] as JSONObject
                 try {
-                    val comment = gson.fromJson(data.toString(), Comment::class.java)
-                    trySend(comment)
+                    val commentModel = gson.fromJson(data.toString(), CommentModel::class.java)
+                    trySend(commentModel)
                 } catch (e: Exception) {
                     Log.e("SocketRepo", "Parse error", e)
                 }

@@ -45,11 +45,11 @@ fun TripMessagesScreen(
     val state by viewModel.state.collectAsState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
-    state.error?.let {
+    if (state.showError) {
         ErrorAlertDialog(
             onDismissRequest = { viewModel.onErrorDialogDismiss() },
             dialogTitle = "Ошибка",
-            dialogText = it
+            dialogText = state.error ?: ""
         )
     }
 
@@ -91,7 +91,7 @@ fun TripMessagesScreen(
                         ListItem(
                             title = message.data.joke
                         )
-                        if (index == state.messages.size - 1 && !state.isLoading && state.hasMore) {
+                        if (index == state.messages.size - 1 && !state.isLoading && state.hasMore && state.error == null) {
                             LaunchedEffect(Unit) {
                                 viewModel.loadMessages()
                             }

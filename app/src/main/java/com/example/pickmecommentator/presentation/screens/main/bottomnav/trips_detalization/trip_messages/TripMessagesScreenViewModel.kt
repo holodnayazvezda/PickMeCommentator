@@ -3,22 +3,14 @@ package com.example.pickmecommentator.presentation.screens.main.bottomnav.trips_
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pickmecommentator.data.network.models.Message
+import com.example.pickmecommentator.domain.models.TripMessagesScreenState
 import com.example.pickmecommentator.domain.usecase.GetTripMessagesUseCase
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.IOException
 
-
-data class TripMessagesScreenState(
-    val tripId: String = "",
-    val messages: List<Message> = emptyList(),
-    val isLoading: Boolean = false,
-    val error: String? = null,
-    val hasMore: Boolean = true
-)
 
 class TripMessagesScreenViewModel(
     savedStateHandle: SavedStateHandle,
@@ -42,17 +34,28 @@ class TripMessagesScreenViewModel(
                 val response = getTripMessagesUseCase(
                     tripId = state.value.tripId,
                     offset = state.value.messages.size,
-                    limit = 20
+                    limit = 10
                 )
                 _state.update {
                     it.copy(
                         messages = it.messages + response.messages,
                         isLoading = false,
+                        error = null,
                         hasMore = response.hasMore
                     )
                 }
             } catch (e: Exception) {
-                _state.update { it.copy(error = e.message, isLoading = false) }
+                val errorMessage = when (e) {
+                    is IOException -> "Проверьте подключение к интернету и состояние сервера."
+                    else -> "Произошла неизвестная ошибка."
+                }
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = errorMessage,
+                        showError = true
+                    )
+                }
             }
         }
     }
@@ -65,6 +68,6 @@ class TripMessagesScreenViewModel(
     }
 
     fun onErrorDialogDismiss() {
-        _state.update { it.copy(error = null) }
+        _state.update { it.copy(showError = false) }
     }
 }
